@@ -46,14 +46,14 @@ jobs:
           - buildcommand: ios
             buildargs: --no-codesign
             os: macos-latest
-          - buildcommand: windows
-            os: windows-latest
-          - buildcommand: linux
-            os: ubuntu-latest
+#          - buildcommand: windows
+#            os: windows-latest
+#          - buildcommand: linux
+#            os: ubuntu-latest
           - buildcommand: appbundle
             os: ubuntu-latest
-          - buildcommand: web
-            os: ubuntu-latest
+#          - buildcommand: web
+#            os: ubuntu-latest
 
 
     steps:
