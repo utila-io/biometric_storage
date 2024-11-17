@@ -50,8 +50,8 @@ jobs:
 #            os: windows-latest
 #          - buildcommand: linux
 #            os: ubuntu-latest
-          - buildcommand: appbundle
-            os: ubuntu-latest
+#          - buildcommand: appbundle
+#            os: ubuntu-latest
 #          - buildcommand: web
 #            os: ubuntu-latest
 
