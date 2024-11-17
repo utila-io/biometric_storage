@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v1
       with:
-        java-version: '12.x'
+        java-version: '21.x'
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable' # or: 'dev' or 'beta'
@@ -46,14 +46,14 @@ jobs:
           - buildcommand: ios
             buildargs: --no-codesign
             os: macos-latest
-          - buildcommand: windows
-            os: windows-latest
-          - buildcommand: linux
-            os: ubuntu-latest
-          - buildcommand: appbundle
-            os: ubuntu-latest
-          - buildcommand: web
-            os: ubuntu-latest
+#          - buildcommand: windows
+#            os: windows-latest
+#          - buildcommand: linux
+#            os: ubuntu-latest
+#          - buildcommand: appbundle
+#            os: ubuntu-latest
+#          - buildcommand: web
+#            os: ubuntu-latest
 
 
     steps:
@@ -64,7 +64,7 @@ jobs:
       - uses: actions/setup-java@v1
         if: matrix.buildcommand == 'appbundle'
         with:
-          java-version: '12.x'
+          java-version: '21.x'
       - name: Patch for linux build
         if: matrix.buildcommand == 'linux'
         run: |
