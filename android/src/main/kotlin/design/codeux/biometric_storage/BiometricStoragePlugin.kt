@@ -394,10 +394,10 @@ class BiometricStoragePlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 }
             }
             promptBuilder
-                .setAllowedAuthenticators(BIOMETRIC_STRONG)
+                .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK)
                 .setNegativeButtonText(promptInfo.negativeButton)
         } else {
-            promptBuilder.setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_STRONG)
+            promptBuilder.setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_STRONG or BIOMETRIC_WEAK)
         }
 
         if (cipher == null || options.authenticationValidityDurationSeconds >= 0) {
