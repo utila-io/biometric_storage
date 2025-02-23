@@ -319,7 +319,7 @@ class BiometricStoragePlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
 
     private fun canAuthenticate(): CanAuthenticateResponse {
         val response = biometricManager.canAuthenticate(
-            BIOMETRIC_STRONG or BIOMETRIC_WEAK
+            BIOMETRIC_STRONG or DEVICE_CREDENTIAL
         )
         return CanAuthenticateResponse.values().firstOrNull { it.code == response }
             ?: throw Exception(
@@ -394,10 +394,10 @@ class BiometricStoragePlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 }
             }
             promptBuilder
-                .setAllowedAuthenticators(BIOMETRIC_STRONG or BIOMETRIC_WEAK)
+                .setAllowedAuthenticators(BIOMETRIC_STRONG)
                 .setNegativeButtonText(promptInfo.negativeButton)
         } else {
-            promptBuilder.setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_STRONG or BIOMETRIC_WEAK)
+            promptBuilder.setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_STRONG)
         }
 
         if (cipher == null || options.authenticationValidityDurationSeconds >= 0) {
