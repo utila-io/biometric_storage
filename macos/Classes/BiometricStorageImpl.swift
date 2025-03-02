@@ -34,6 +34,8 @@ private func hpdebug(_ message: String) {
   print(message);
 }
 
+typealias StoredContext = (context: LAContext, expireAt: Date)
+
 class BiometricStorageImpl {
   
   init(storageError: @escaping StorageError, storageMethodNotImplemented: Any) {
@@ -41,10 +43,31 @@ class BiometricStorageImpl {
     self.storageMethodNotImplemented = storageMethodNotImplemented
   }
   
-  private lazy var context: LAContext = LAContext()
+  // MARK: - Properties
   private var stores: [String: InitOptions] = [:]
   private let storageError: StorageError
   private let storageMethodNotImplemented: Any
+
+  // MARK: - Reuse authentication
+  private var _context: StoredContext?
+  private var context: LAContext {
+    get {
+      if let context = _context {
+        if context.expireAt.timeIntervalSinceNow < 0 {
+          // already expired.
+          _context = nil
+        } else {
+          return context.context
+        }
+      }
+
+      let context = LAContext()
+      context.touchIDAuthenticationAllowableReuseDuration = 300
+      _context = (context: context, expireAt: Date(timeIntervalSinceNow: 300))
+
+      return context
+    }
+  }
 
   private func storageError(code: String, message: String?, details: Any?) -> Any {
     return storageError(code, message, details)
@@ -168,14 +191,6 @@ class BiometricStorageImpl {
     var query = baseQuery(name: name)
     
     if (initOptions.authenticationRequired) {
-      if initOptions.authenticationValidityDurationSeconds > 0 {
-        if #available(OSX 10.12, *) {
-          context.touchIDAuthenticationAllowableReuseDuration = Double(initOptions.authenticationValidityDurationSeconds)
-        } else {
-          // Fallback on earlier versions
-          hpdebug("Pre OSX 10.12 no touchIDAuthenticationAllowableReuseDuration available. ignoring.")
-        }
-      }
       var error: Unmanaged<CFError>?
       guard let access = SecAccessControlCreateWithFlags(
         nil, // Use the default allocator.
